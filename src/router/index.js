@@ -2,31 +2,80 @@ import { createRouter, createWebHistory } from "vue-router"
 import LogIn from "@/components/LogIn"
 import UserBase from "@/components/base/UserBase"
 import ChatRoomBase from "@/components/base/ChatRoomBase"
+import HomePage from "@/components/heimdall/HomePage"
 import ChatRoom from "@/components/chatroom/ChatRoom"
+import HomeBase from "@/components/base/HomeBase"
 import requests from "@/request/request.js";
+import BackstageBase from "@/components/base/BackstageBase"
+import UserBackstage from "@/components/backstage/UserBackstage"
+import UserAuth from "@/components/user/UserAuth"
+import ArticleManage from "@/components/backstage/ArticleManage"
+import ArticleContent from "@/components/heimdall/ArticleContent"
+
 
 const routes = [
   {
-    path: "/user",
+    path: "/UserBase",
     component: UserBase,
     children: [
       {
-        path: 'login',
+        path: '/login',
         name: 'login',
-        component: LogIn
+        component: LogIn,
+        meta: { requiresAuth: false }
+      }
+    ]
+  }, {
+    path: "/homeBase",
+    component: HomeBase,
+    children: [
+      {
+        path: "/",
+        name: "home",
+        component: HomePage,
+        meta: { requiresAuth: false }
+      }, {
+        path: "/article/:id/",
+        name: "article",
+        component: ArticleContent,
+        meta: { requiresAuth: false }
       }
     ]
   },
   {
-    path: "/",
-    component: ChatRoomBase,
-    children: [
-      {
-        path: "chatroom",
-        name: "chatroom",
-        component: ChatRoom
-      }
-    ]
+    path: "/UserAuth",
+    component: UserAuth,
+    children: [{
+      path: "/chat",
+      component: ChatRoomBase,
+      children: [
+        {
+          path: "/chatroom",
+          name: "chatroom",
+          component: ChatRoom,
+          meta: { requiresAuth: false }
+        }
+      ]
+    },
+
+    {
+      path: "/backstage",
+      component: BackstageBase,
+      children: [
+        {
+          path: "",
+          name: "backstage",
+          component: UserBackstage,
+          meta: { requiresAuth: false }
+        },
+        {
+          path: "ArticleManage",
+          name: "ArticleManage",
+          component: ArticleManage,
+          meta: { requiresAuth: false }
+        }
+      ]
+    }]
   }
 ];
 
@@ -44,8 +93,8 @@ function clean_account_info() {
 router.beforeEach(async (to, from, next) => {
   let token = localStorage.getItem("token");
   let userID = localStorage.getItem("uid");
-  let whiteList = ['/user/login', '/user/register', '/user/reset', "/chatroom"]
-  if (whiteList.indexOf(to.path) != -1) {
+  // let whiteList = ['/login', '/register', '/reset', "/chatroom", "/"]
+  if (!to.meta.requiresAuth) {
     next()
   }
   else if (token) {
@@ -63,17 +112,17 @@ router.beforeEach(async (to, from, next) => {
         }
         else {
           clean_account_info()
-          next("/user/login");
+          next("/login");
         }
       }
       else {
         clean_account_info()
-        next("/user/login")
+        next("/login")
       }
     })
   }
   else {
-    next("/user/login")
+    next("/login")
   }
 })
 

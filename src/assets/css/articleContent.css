@@ -1,0 +1,169 @@
+.article-background {
+  height: 350px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  img {
+    flex: 1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .article-background {
+    display: block;
+  }
+
+  .common-width {
+    max-width: 1400px;
+    width: 74%;
+  }
+}
+
+.article-content {
+  position: relative;
+  min-height: 100vh;
+  background-color: white;
+  display: flex;
+  padding: 15px 0px;
+  align-items: center;
+  flex-direction: column;
+
+  .article-comment {
+    margin-top: 15px;
+  }
+
+  .article-layout {
+    width: 100%;
+    display: flex;
+    .content {
+      width: 74%;
+      border-radius: 10px;
+    }
+
+    .aside-catalog {
+      .sticky-layout {
+        position: sticky;
+        border-radius: 10px;
+        margin-left: 15px;
+      }
+    }
+  }
+}
+.loading {
+  height: 100%;
+  background-color: #f6f5f3;
+  position: fixed;
+  z-index: 2026;
+}
+
+.not-found-article {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  img {
+    width: 140px;
+  }
+}
+
+.md-editor .mk-cute-theme {
+  background-image: none;
+}
+
+.fix-catalog {
+  position: fixed;
+  top: 10%;
+}
+
+.article-title-layout {
+  position: absolute;
+  bottom: 0px;
+  color: white;
+  b {
+    font-size: 24px;
+  }
+
+  .information-line {
+    display: flex;
+    font-size: 14px;
+
+    div {
+      display: flex;
+      align-items: center;
+      margin: 0px 9px;
+      svg {
+        margin-right: 1px;
+      }
+    }
+
+    div:first-child {
+      margin-left: 0px;
+    }
+
+    div::last-child {
+      margin-right: 0px;
+    }
+  }
+}
+
+hr {
+  border: 0;
+  /* 清除默认边框*/
+  height: 2px;
+  /* 设置高度*/
+  background: linear-gradient(to right, #4285f4, #34a853, #fbbc05, #ea4335);
+  /* 使用渐变颜色作为背景*/
+  margin: 20px 0;
+  /* 设置上下边距*/
+  background-size: 400% 100%;
+  /* 添加背景尺寸*/
+  animation: colorChange 4s linear infinite;
+  /* 添加动画效果*/
+}
+
+@keyframes colorChange {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.comment-title {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 5px;
+  svg {
+    margin-right: 5px;
+  }
+}
+
+.comment {
+  textarea {
+    resize: none;
+    --el-input-focus-border-color: #ffb41c;
+  }
+  .comment-toolset {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.comment-submit {
+  color: white !important;
+}
+
+.comment-list {
+  .comment-item:nth-child(n) {
+    margin: 30px 0px;
+  }
+}

@@ -1,5 +1,6 @@
 import requests from "@/request/request"
 
+
 function getUserInfo() {
     requests({
         method: "get",
@@ -12,6 +13,8 @@ function getUserInfo() {
     });
 }
 
+
+
 export {
-    getUserInfo
+    getUserInfo,
 }

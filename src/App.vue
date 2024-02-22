@@ -15,6 +15,7 @@ export default {};
 
 body {
   height: 100% !important;
+  line-height: 2;
 }
 
 nav {

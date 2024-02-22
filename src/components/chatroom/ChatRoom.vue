@@ -1,13 +1,18 @@
 <template>
   <div class="chatroom-main" @click="HiddenToolItem">
-    <el-row justify="center" style="width: 80%; overflow: hidden" id="row">
-      <el-col :md="18" class="chatroom">
+    <el-row
+      justify="center"
+      style="width: 80%; overflow: hidden; z-index: 2000"
+      id="row"
+    >
+      <el-col :md="18" class="chatroom" style="position: relative">
         <div class="side-menu">
           <div>
             <div class="side-menu-item">
               <el-avatar
                 shape="square"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+                :src="user.user_avatar"
+                style="background-color: white"
               />
             </div>
             <div class="side-menu-item" @click="activeMenu(0)">
@@ -174,7 +179,7 @@
               v-for="(value, index) in sessionList"
               :key="index"
               ref="session"
-              :class="['notification-item'].concat(value.className).join(' ')"
+              class="notification-item"
               :data-index="index"
               @click="startSession(index)"
             >
@@ -186,14 +191,35 @@
             class="chatroom-notify-list"
             ref="sessionList-1"
             style="display: none"
-          ></div>
+          >
+            <div
+              v-for="(value, index) in contactList"
+              :key="index"
+              ref="contact"
+              class="notification-item"
+              style="height: 36px"
+              :data-index="index"
+              @click="ShowBusinessCard(index)"
+            >
+              <div>
+                <el-image
+                  loading="lazy"
+                  style="width: 36px; height: 36px"
+                  :src="value.user_avatar"
+                ></el-image>
+              </div>
+              <div style="margin-left: 20px">
+                <span>{{ value.username }}</span>
+              </div>
+            </div>
+          </div>
           <div
             class="chatroom-notify-list"
             ref="sessionList-2"
             style="display: none"
           >
             <div
-              :class="['notification-item'].concat(value.className).join(' ')"
+              class="notification-item"
               v-for="(value, index) in groupsessionList"
               :key="index"
               :data-index="index"
@@ -225,7 +251,7 @@
           </div>
         </div>
         <div class="right-body">
-          <div v-if="ShowSession == 1">
+          <div v-if="ShowSession == 1" style="position: relative">
             <div>
               <div
                 style="
@@ -239,45 +265,107 @@
                   >{{ rightInfo.title }} {{ rightInfo.name }}</span
                 >
                 <div style="flex-grow: 1" />
-                <div>
-                  <el-button type="danger" v-if="!rightInfo.closeable" round
-                    >结束会话</el-button
-                  >
+                <div class="button-row" v-if="rightInfo.is_system != true">
+                  <el-button size="large" link @click="GroupSessionMore">
+                    <el-icon><MoreFilled /></el-icon>
+                  </el-button>
                 </div>
               </div>
             </div>
             <div
               style="
                 height: calc(100% - 260px);
-                overflow: auto;
-                background-color: rgb(249, 249, 249);
+                overflow: hidden;
+                display: flex;
+                position: relative;
+                flex: 1;
               "
-              class="session-box"
-              id="session-box"
-              refs="sessionBox"
             >
-              <div
-                v-if="SessionHistory[rightInfo.uuid].next == null"
-                style="text-align: center"
-              >
-                <span>----------到头啦！！！----------</span>
+              <div class="loading" v-if="sessionLoading">
+                <img
+                  src="../../assets/images/loading/1.gif"
+                  width="100"
+                  height="100"
+                />
               </div>
-              <div v-if="SessionHistory[rightInfo.uuid].loading"></div>
               <div
-                v-for="(message, index) in SessionHistory[rightInfo.uuid][
-                  'msg'
-                ]"
-                :key="index"
-                ref="msg"
+                style="
+                  flex: 1;
+                  height: 100%;
+                  overflow-y: auto;
+                  background-color: rgb(249, 249, 249);
+                "
+                class="session-box"
+                id="session-box"
+                refs="sessionBox"
               >
-                <ChatBubble
-                  :message="message.message"
-                  :sender="message.sender"
-                ></ChatBubble>
+                <div
+                  v-if="SessionHistory[rightInfo.uuid].next == null"
+                  style="text-align: center"
+                >
+                  <span>----------到头啦！！！----------</span>
+                </div>
+                <div v-if="SessionHistory[rightInfo.uuid].loading"></div>
+                <div>
+                  <div
+                    v-for="(message, index) in SessionHistory[rightInfo.uuid][
+                      'msg'
+                    ]"
+                    :key="index"
+                    ref="msg"
+                  >
+                    <div v-if="rightInfo.is_system">
+                      <SystemNotice
+                        :actor="message.actor_info"
+                        :level="message.level"
+                        :verb="message.verb"
+                      ></SystemNotice>
+                    </div>
+                    <div v-else>
+                      <ChatBubble
+                        :message="message.message"
+                        :sender="message.sender"
+                        :type="message.message_type"
+                        :size="message.size"
+                        :tag="
+                          rightInfo.lord.username == message.sender.username
+                            ? 'lord'
+                            : ''
+                        "
+                        v-if="
+                          rightInfo.lord.username == message.sender.username
+                        "
+                      ></ChatBubble>
+                      <ChatBubble
+                        :message="message.message"
+                        :sender="message.sender"
+                        :type="message.message_type"
+                        :size="message.size"
+                        v-else
+                      ></ChatBubble>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div style="height: 200px">
-              <div class="toolbar-format">
+            <div style="height: 200px" v-if="rightInfo.is_system != true">
+              <div class="toolbar-format" style="position: relative">
+                <div
+                  class="toolbar-progress animate__animated"
+                  ref="progressComponent"
+                  style="display: none"
+                >
+                  <el-progress
+                    :text-inside="true"
+                    :percentage="progress.percentage"
+                    :status="progress.status"
+                    :stroke-width="10"
+                    :color="[
+                      { color: '#F56C6C', percentage: 99 },
+                      { color: '#67c23a', percentage: 100 },
+                    ]"
+                  />
+                </div>
                 <div class="toolbar-item" @click.stop="ShowToolItem('emoji')">
                   <svg
                     t="1699942838463"
@@ -357,61 +445,79 @@
                   </div>
                 </div>
                 <div class="toolbar-item">
-                  <svg
-                    t="1699947181776"
-                    class="icon"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="1711"
-                    width="24"
-                    height="24"
-                  >
-                    <path
-                      d="M809.2 924.48H235.9c-89.6 0-162.9-76.6-162.9-170.3v-511.4c0-93.7 73.3-170.3 162.9-170.3l115 2c20.1 0 39.5 7.6 54.7 21.5l86 80.9c15.1 13.9 34.5 21.5 54.7 21.5h263c89.6 0 162.9 76.6 162.9 170.3v385.5c-0.1 93.7-73.4 170.3-163 170.3z"
-                      fill="#6477FF"
-                      p-id="1712"
-                    ></path>
-                    <path
-                      d="M761.2 888.48H284c-116 0-210.9-94.9-210.9-210.9v-297c0-25.5 20.7-46.1 46.1-46.1h806.7c25.5 0 46.1 20.7 46.1 46.1v297c0.1 116-94.8 210.9-210.8 210.9z"
-                      fill="#465CDB"
-                      opacity=".69"
-                      p-id="1713"
-                    ></path>
-                    <path
-                      d="M829 738.48H216.1c-31.4 0-57-25.7-57-57v-318c0-31.4 25.7-57 57-57H829c31.4 0 57 25.7 57 57v317.9c0.1 31.4-25.6 57.1-57 57.1z"
-                      fill="#FFFFFF"
-                      p-id="1714"
-                    ></path>
-                    <path
-                      d="M831 719.48H218.1c-31.4 0-57-25.7-57-57v-318c0-31.4 25.7-57 57-57H831c31.4 0 57 25.7 57 57v317.9c0.1 31.4-25.6 57.1-57 57.1z"
-                      fill="#FFFFFF"
-                      opacity=".16"
-                      p-id="1715"
-                    ></path>
-                    <path
-                      d="M807.3 924.48H237.8c-90.6 0-164.8-74.1-164.8-164.8v-356.2h899v356.2c0.1 90.7-74.1 164.8-164.7 164.8z"
-                      fill="#6477FF"
-                      p-id="1716"
-                    ></path>
-                    <path
-                      d="M805.3 924.48H235.8c-90.6 0-164.8-74.1-164.8-164.8v-17.2h899v17.2c0.1 90.7-74.1 164.8-164.7 164.8z"
-                      fill="#465CDB"
-                      opacity=".14"
-                      p-id="1717"
-                    ></path>
-                    <path
-                      d="M595.6 598.48H413.1c-39.9 0-72.5-32.6-72.5-72.5s32.6-72.5 72.5-72.5h182.5c39.9 0 72.5 32.6 72.5 72.5s-32.6 72.5-72.5 72.5z"
-                      fill="#5D75CE"
-                      opacity=".52"
-                      p-id="1718"
-                    ></path>
-                    <path
-                      d="M585.5 583.48H423.6c-31.6 0-57.5-25.9-57.5-57.5s25.9-57.5 57.5-57.5h161.9c31.6 0 57.5 25.9 57.5 57.5s-25.9 57.5-57.5 57.5z"
-                      fill="#FFD629"
-                      p-id="1719"
-                    ></path>
-                  </svg>
+                  <el-upload
+                    v-model:file-list="uploadList"
+                    action="http://127.0.0.1:8000/api/upload/"
+                    multiple
+                    :limit="1"
+                    :data="{ uuid: this.rightInfo.uuid }"
+                    :headers="{
+                      Authorization: 'token ' + this.$cookies.get('token'),
+                    }"
+                    :before-upload="BeforeUpload"
+                    :on-error="UploadFailed"
+                    :on-success="UploadSuccess"
+                    :on-progress="UploadProgress"
+                    style="position: relative; translate: none"
+                    ref="uploadComponent"
+                    accept=".pdf, .doc, .docx, .xls, .xlsx,.jpg,.jpeg,.png,.gif"
+                    ><div @click="uploadSubmit">
+                      <svg
+                        t="1699947181776"
+                        class="icon"
+                        viewBox="0 0 1024 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="1711"
+                        width="24"
+                        height="24"
+                      >
+                        <path
+                          d="M809.2 924.48H235.9c-89.6 0-162.9-76.6-162.9-170.3v-511.4c0-93.7 73.3-170.3 162.9-170.3l115 2c20.1 0 39.5 7.6 54.7 21.5l86 80.9c15.1 13.9 34.5 21.5 54.7 21.5h263c89.6 0 162.9 76.6 162.9 170.3v385.5c-0.1 93.7-73.4 170.3-163 170.3z"
+                          fill="#6477FF"
+                          p-id="1712"
+                        ></path>
+                        <path
+                          d="M761.2 888.48H284c-116 0-210.9-94.9-210.9-210.9v-297c0-25.5 20.7-46.1 46.1-46.1h806.7c25.5 0 46.1 20.7 46.1 46.1v297c0.1 116-94.8 210.9-210.8 210.9z"
+                          fill="#465CDB"
+                          opacity=".69"
+                          p-id="1713"
+                        ></path>
+                        <path
+                          d="M829 738.48H216.1c-31.4 0-57-25.7-57-57v-318c0-31.4 25.7-57 57-57H829c31.4 0 57 25.7 57 57v317.9c0.1 31.4-25.6 57.1-57 57.1z"
+                          fill="#FFFFFF"
+                          p-id="1714"
+                        ></path>
+                        <path
+                          d="M831 719.48H218.1c-31.4 0-57-25.7-57-57v-318c0-31.4 25.7-57 57-57H831c31.4 0 57 25.7 57 57v317.9c0.1 31.4-25.6 57.1-57 57.1z"
+                          fill="#FFFFFF"
+                          opacity=".16"
+                          p-id="1715"
+                        ></path>
+                        <path
+                          d="M807.3 924.48H237.8c-90.6 0-164.8-74.1-164.8-164.8v-356.2h899v356.2c0.1 90.7-74.1 164.8-164.7 164.8z"
+                          fill="#6477FF"
+                          p-id="1716"
+                        ></path>
+                        <path
+                          d="M805.3 924.48H235.8c-90.6 0-164.8-74.1-164.8-164.8v-17.2h899v17.2c0.1 90.7-74.1 164.8-164.7 164.8z"
+                          fill="#465CDB"
+                          opacity=".14"
+                          p-id="1717"
+                        ></path>
+                        <path
+                          d="M595.6 598.48H413.1c-39.9 0-72.5-32.6-72.5-72.5s32.6-72.5 72.5-72.5h182.5c39.9 0 72.5 32.6 72.5 72.5s-32.6 72.5-72.5 72.5z"
+                          fill="#5D75CE"
+                          opacity=".52"
+                          p-id="1718"
+                        ></path>
+                        <path
+                          d="M585.5 583.48H423.6c-31.6 0-57.5-25.9-57.5-57.5s25.9-57.5 57.5-57.5h161.9c31.6 0 57.5 25.9 57.5 57.5s-25.9 57.5-57.5 57.5z"
+                          fill="#FFD629"
+                          p-id="1719"
+                        ></path>
+                      </svg></div
+                  ></el-upload>
                 </div>
                 <div class="toolbar-item" @click="this.ShowSession = 2">
                   <svg
@@ -473,7 +579,16 @@
           >
             <div class="session-introduction">
               <div class="object-avatar">
-                <el-avatar :size="50" :src="rightInfo.avatar"></el-avatar>
+                <el-avatar
+                  :size="50"
+                  v-if="rightInfo.avatar"
+                  :src="rightInfo.avatar"
+                ></el-avatar>
+                <el-avatar
+                  :size="50"
+                  v-if="rightInfo.user_avatar"
+                  :src="rightInfo.user_avatar"
+                ></el-avatar>
               </div>
               <div class="object-description">
                 <div class="object-tile" v-if="rightInfo.is_group">
@@ -482,11 +597,15 @@
                 </div>
                 <div class="object-name" v-else>
                   <span>用户名：</span>
-                  <div>{{ rightInfo.name }}</div>
+                  <div>{{ rightInfo.username }}</div>
                 </div>
                 <div class="object-anouncement" v-if="rightInfo.announcement">
                   <span>群公告：</span>
                   <div>{{ rightInfo.announcement }}</div>
+                </div>
+                <div class="object-description" v-if="rightInfo.description">
+                  <span>个人介绍：</span>
+                  <div>{{ rightInfo.description }}</div>
                 </div>
                 <div class="object-owner" v-if="rightInfo.lord">
                   <span>群 主：</span>
@@ -513,7 +632,10 @@
                   <span>群人数：</span>
                   <div>{{ rightInfo.members_count }}</div>
                 </div>
-                <div class="object-group-type">
+                <div
+                  class="object-group-type"
+                  v-if="rightInfo.accessible != undefined"
+                >
                   <span>类 型：</span>
                   <div v-if="rightInfo.accessible">
                     <el-icon><Unlock /></el-icon>公开群
@@ -524,11 +646,14 @@
                 </div>
               </div>
               <div>
-                <div v-if="rightInfo.is_group"></div>
                 <el-button
+                  v-if="rightInfo.is_group"
                   type="primary"
                   @click="JoinGroupSession(rightInfo.session_id)"
                   >发消息</el-button
+                >
+                <el-button v-else type="primary" @click="JoinFriendSession"
+                  >开始聊天</el-button
                 >
               </div>
             </div>
@@ -538,28 +663,151 @@
           </div>
           <div v-else style="background-color: rgb(250, 250, 250)"></div>
         </div>
+        <div
+          style="
+            width: 200px;
+            height: 100%;
+            position: absolute;
+            border-radius: 0px 15px 15px 0px;
+            background-color: rgb(249, 249, 249);
+            right: -200px;
+            display: none;
+            z-index: 0;
+          "
+          v-if="rightInfo.is_group == true && ShowSession == 1"
+          class="animate__animated"
+          ref="GroupMoreFunc"
+        >
+          <div
+            style="
+              margin: 5px 3px;
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+            "
+          >
+            <el-input
+              v-model="searchMembers"
+              class="w-50 m-2"
+              placeholder="查找群成员"
+            >
+              <template #prefix>
+                <el-icon class="el-input__icon"><search /></el-icon>
+              </template>
+            </el-input>
+            <div class="group-members-list">
+              <div
+                v-if="rightInfo.members"
+                v-for="(member, index) in rightInfo.members.filter((data) => {
+                  return data.members.username.indexOf(searchMembers) != -1;
+                })"
+                :key="member.id"
+                class="group-member right-mouse"
+                :data-id="index"
+              >
+                <img :src="member.members.user_avatar" width="40" height="40" />
+
+                <div
+                  style="
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    text-align: center;
+                    white-space: nowrap;
+                    width: 100%;
+                  "
+                >
+                  <span style="font-size: 14px">{{
+                    member.members.username
+                  }}</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin: 0px 5px; width: calc(100% - 15px)">
+              <el-button style="width: 100%" type="danger" @click="closeSocket"
+                >关闭群聊</el-button
+              >
+            </div>
+          </div>
+        </div>
       </el-col>
     </el-row>
   </div>
+  <div id="rcb_menu">
+    <div class="rcb-menu-item" v-if="user.id != friend_info.uid">
+      <span>查看信息(暂未开发)</span>
+    </div>
+    <div class="rcb-menu-item" v-else><span>修改信息</span></div>
+    <el-divider style="margin: 0px" />
+    <div
+      class="rcb-menu-item"
+      @click="SendNotification(user.id, 'add_friend', friend_info.uid)"
+      v-if="!friend_info.is_friend && user.id != friend_info.uid"
+    >
+      <span>添加好友</span>
+    </div>
+    <div
+      class="rcb-menu-item"
+      v-else-if="user.id != friend_info.uid"
+      @click="deleteFriendDialog = true"
+    >
+      <span>删除好友</span>
+    </div>
+  </div>
+  <el-dialog
+    v-model="deleteFriendDialog"
+    title="删除好友"
+    width="20%"
+    destroy-on-close
+    center
+  >
+    <span> 是否删除好友？ </span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="deleteFriendDialog = false">取消</el-button>
+        <el-button type="primary" @click="DeleteFriend(friend_info.uid)">
+          确定
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script>
 import EmojiPicker from "vue3-emoji-picker";
 import ChatBubble from "./ChatBubble.vue";
+import SystemNotice from "./SystemNotice.vue";
 import ChatVedio from "./ChatVedio.vue";
 import "vue3-emoji-picker/css";
 import { getUserInfo } from "../../../utils/cookie";
+import { startSakura, stopSakura } from "@/assets/js/sakura";
+import "@/assets/css/chatroom.css";
+import "animate.css";
+import { ElMessage } from "element-plus";
+// import DissolveLoading from "@/components/loading/DissolveLoading";
 // import "vue-cropper/dist/index.css";
 // import { VueCropper } from "vue-cropper";
 import { utf16toEntities, entitiestoUtf16 } from "../../../utils/transfer";
+import { SendNotification } from "@/assets/js/common";
 export default {
   name: "ChatRoom",
   components: {
     ChatBubble,
     EmojiPicker,
     ChatVedio,
+    SystemNotice,
+  },
+  props: ["me"],
+  watch: {
+    me: function (value) {
+      this.user = value;
+    },
   },
   mounted() {
+    startSakura();
     this.$cookies.set("token", "699072c7d66a8c8b1c73366d8fc605bcd8b1db64");
+    if (!this.$cookies.get("token")) {
+      this.$router.push("/user/login");
+    }
+
     this.$axios({
       method: "get",
       Headers: { "Content-Type": "multipart/form-data" },
@@ -569,19 +817,43 @@ export default {
       _menu_item[this.defaultActive + 1].classList.add("active-aside");
       if (res.data) {
         var data = res.data.data;
-        for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < (data == null ? 0 : data.length); i++) {
           data[i]["className"] = [];
           this.groupsessionList.push(data[i]);
+        }
+      }
+    });
+    this.$axios({
+      method: "get",
+      Headers: { "Content-Type": "multipart/form-data" },
+      url: "/api/friend/",
+    }).then((res) => {
+      let _menu_item = document.getElementsByClassName("side-menu-item");
+      _menu_item[this.defaultActive + 1].classList.add("active-aside");
+      if (res.data) {
+        var data = res.data.data;
+        for (var i = 0; i < (data == null ? 0 : data.length); i++) {
+          this.contactList.push(data[i]);
         }
       }
     });
     if (!localStorage.getItem("userInfo")) {
       getUserInfo();
     }
+    document.body.addEventListener("click", function () {
+      document.querySelector("#rcb_menu").style.display = "none";
+    });
   },
   data() {
     return {
       search: "",
+      searchMembers: "",
+      uploadList: [],
+      user: {},
+      deleteFriendDialog: false,
+      friend_info: { is_friend: false, uid: 0, index: -1 },
+      sessionLoading: false,
+      progress: { percentage: 0, status: undefined },
       defaultActive: 0,
       ShowSession: -1, // 1表示展示会话，0表示展示联系人或者群聊信息，-1表示空内容
       option: {
@@ -604,19 +876,29 @@ export default {
         fixedNumber: [1, 2],
       },
       message: "", // 会话消息内容
-      activesession: -1,
-      activegroupsession: -1,
+      activesession: -1, // 当前激活会话
+      activegroupsession: -1, // 当前激活群组
+      activecontact: -1, // 当前激活联系人
       sessionList: [
         {
           title: "消息通知",
           avatar: require("@/assets/images/icons/notification.png"),
           closeable: false,
+          is_system: true,
           editable: false,
+          uuid: this.$cookies.get("token"),
           className: [],
+          socket: this.SystemSocket(),
         },
       ],
-      rightInfo: { title: "test", closeable: false }, // 右侧主题展示信息
+      rightInfo: {
+        title: "test",
+        closeable: false,
+        members: [],
+        socket: undefined,
+      }, // 右侧主题展示信息
       groupsessionList: [],
+      contactList: [],
       asideMenu: ["session", "contact", "groupsession"],
       expendTool: "",
       socket: undefined,
@@ -624,6 +906,69 @@ export default {
     };
   },
   methods: {
+    SendNotification,
+    GroupSessionMore() {
+      if (!this.$refs.GroupMoreFunc.classList.contains("animate__fadeInLeft")) {
+        this.$refs.GroupMoreFunc.style.display = "flex";
+        this.$refs.GroupMoreFunc.classList.add("animate__fadeInLeft");
+        this.$refs.GroupMoreFunc.classList.remove("animate__fadeOutLeft");
+      } else {
+        this.$refs.GroupMoreFunc.classList.add("animate__fadeOutLeft");
+        this.$refs.GroupMoreFunc.classList.remove("animate__fadeInLeft");
+      }
+    },
+    DeleteFriend(friend_id) {
+      try {
+        this.$axios({
+          method: "delete",
+          url: "/api/friend/",
+          data: {
+            friend_id: friend_id,
+          },
+        }).then((res) => {
+          var data = res.data;
+          if (data.code === 10018) {
+            ElMessage.success(data.data);
+            this.friend_info.is_friend = false;
+            this.rightInfo.members[this.friend_info.index].is_friend = false;
+            this.contactList = this.contactList.filter((contact) => {
+              contact.id != this.friend_info.uid;
+            });
+          } else {
+            ElMessage.error(data.data);
+          }
+        });
+      } finally {
+        this.deleteFriendDialog = false;
+      }
+    },
+    SystemSocket() {
+      var socket = new WebSocket(
+        "ws://127.0.0.1:8000/ws/chat/" + this.$cookies.get("token") + "/"
+      );
+      this.$axios({
+        method: "get",
+        url: "/api/system/session/message/",
+        params: {
+          uuid: this.$cookies.get("toekn"),
+        },
+      }).then((res) => {
+        this.sessionLoading = false;
+        if (res.data) {
+          this.SessionHistory[this.$cookies.get("token")] = {
+            next: res.data.next,
+            previous: res.data.previous,
+            loading: false,
+            msg: [],
+          };
+          res.data.results.forEach((msg) => {
+            this.SessionHistory[this.$cookies.get("token")]["msg"].unshift(msg);
+          }); // 导入该群的历史记录
+        }
+      });
+      socket.onmessage = this.WebSocketMessage;
+      return socket;
+    },
     loadHistoryMessage() {
       if (!document.getElementById("session-box").scrollTop) {
         var has_next = this.SessionHistory[this.rightInfo.uuid].next;
@@ -654,7 +999,9 @@ export default {
         }
       }
     },
+
     startSession(index) {
+      var that = this;
       this.ActiveItem(index);
       this.ShowSession = 1;
       this.rightInfo = this.sessionList[index];
@@ -663,8 +1010,36 @@ export default {
         document
           .getElementById("session-box")
           .addEventListener("scroll", this.loadHistoryMessage);
+        const f = Array.from(document.getElementsByClassName("right-mouse"));
+        const rightMenu = document.querySelector("#rcb_menu");
+        f.forEach((el, index) => {
+          el.addEventListener("contextmenu", function (e) {
+            var dom = e.target.parentNode;
+            var member = that.rightInfo.members[Number(dom.dataset.id)];
+            if (!dom.classList.contains("group-member")) {
+              return;
+            }
+            that.friend_info = {
+              uid: member.members.id,
+              is_friend: member.is_friend,
+              index: index,
+            };
+
+            e.preventDefault();
+            rightMenu.style.display = "block";
+            let x = e.clientX,
+              y = e.clientY,
+              menuWidth = rightMenu.offsetWidth,
+              menuHeight = rightMenu.offsetHeight,
+              htmlWidth = document.body.clientWidth,
+              htmlHeight = document.body.clientHeight;
+            if (x + menuWidth < htmlWidth) rightMenu.style.left = x + "px";
+            else rightMenu.style.left = htmlWidth - menuWidth + "px";
+            if (y + menuHeight < htmlHeight) rightMenu.style.top = y + "px";
+            else rightMenu.style.top = htmlHeight - menuHeight + "px";
+          });
+        });
       });
-      console.log(this.rightInfo);
     },
     JoinGroupSession() {
       if (!this.rightInfo.accessible) {
@@ -678,35 +1053,26 @@ export default {
           showCancelButton: true,
           confirmButtonText: "確定",
           cancelButtonText: "取消",
-          preConfirm: async (password) => {
-            try {
-              this.$axios({
-                method: "post",
-                Headers: { "Content-Type": "multipart/form-data" },
-                url: "/api/session/check/",
-                data: {
-                  p: password,
-                  id: this.rightInfo.session_id,
-                },
-              }).then((res) => {
-                if (res.data.data.verify) {
-                  return res.data;
-                } else {
-                  this.$swal.fire({
-                    icon: "error",
-                    title: "密码错误，验证失败！",
-                  });
-                }
-              });
-            } catch (error) {
-              this.$swal.showValidationMessage(`
-                Request failed: ${error}
-              `);
-            }
-          },
         }).then((result) => {
           if (result.isConfirmed) {
-            this.addNewSession();
+            this.$axios({
+              method: "post",
+              Headers: { "Content-Type": "multipart/form-data" },
+              url: "/api/session/check/",
+              data: {
+                p: result.value,
+                id: this.rightInfo.session_id,
+              },
+            }).then((res) => {
+              if (!res.data.data.verify) {
+                this.$swal.fire({
+                  icon: "error",
+                  title: "密码错误，验证失败！",
+                });
+              } else {
+                this.addNewSession();
+              }
+            });
           }
         });
       } else {
@@ -721,7 +1087,10 @@ export default {
       var index;
       // websocket连接
       if (!this.SessionHistory[this.rightInfo.uuid]) {
-        this.rightInfo.socket = this.createSocket(this.rightInfo.uuid);
+        this.rightInfo.socket = this.createSocket(
+          this.rightInfo.uuid,
+          "/api/group/session/message/"
+        );
         this.sessionList.push(this.rightInfo);
         index = this.sessionList.length - 1;
         this.SessionHistory[this.rightInfo.uuid] = {};
@@ -735,15 +1104,17 @@ export default {
       this.activeMenu(0);
       this.startSession(index);
     },
-    createSocket(uuid) {
+    createSocket(uuid, url) {
       var socket = new WebSocket("ws://127.0.0.1:8000/ws/chat/" + uuid + "/");
+      this.sessionLoading = true;
       this.$axios({
         method: "get",
-        url: "/api/group/session/message/",
+        url: url,
         params: {
           uuid: uuid,
         },
       }).then((res) => {
+        this.sessionLoading = false;
         if (res.data) {
           this.SessionHistory[uuid] = {
             next: res.data.next,
@@ -763,12 +1134,18 @@ export default {
       socket.onmessage = this.WebSocketMessage;
       return socket;
     },
+
     WebSocketMessage(e) {
-      const data = JSON.parse(e.data);
-      var message = {};
-      message.message = entitiestoUtf16(data.message);
-      message.sender = data.sender;
-      this.SessionHistory[data.uuid]["msg"].push(message);
+      var message = JSON.parse(e.data);
+      console.log(message);
+      if (message.type) {
+        message.message = entitiestoUtf16(message.message);
+        this.SessionHistory[message.uuid]["msg"].push(message);
+      } else {
+        message.message = message.message;
+        this.SessionHistory[message.uuid]["msg"].push(message);
+      }
+
       this.$nextTick(function () {
         var box = document.getElementById("session-box");
         box.scrollTop = box.scrollHeight;
@@ -804,7 +1181,7 @@ export default {
     cleanActive(index) {
       var _leave_menu = this.asideMenu[this.defaultActive];
       if (this["active" + _leave_menu] >= 0) {
-        // 切换侧边栏时,去除已激活的is-active类名
+        // 切换侧边栏时,去除已激活的session-is-active类名
         this.removeItemActive(_leave_menu);
         this["active" + _leave_menu] = -1;
       }
@@ -844,17 +1221,17 @@ export default {
         this.removeItemActive(session_part);
       }
 
-      this[session_part + "List"][target_index].className.push("is-active");
+      // this[session_part + "List"][target_index].className.push();
+      this.$nextTick(function () {
+        this.$refs[session_part][target_index].classList.add(
+          "session-is-active"
+        );
+      });
       this["active" + session_part] = target_index;
     },
     removeItemActive(session_part) {
-      this[session_part + "List"][
-        this["active" + session_part]
-      ].className.splice(
-        this[session_part + "List"][
-          this["active" + session_part]
-        ].className.indexOf("is-active"),
-        1
+      this.$refs[session_part][this["active" + session_part]].classList.remove(
+        "session-is-active"
       );
     },
     sendMessage(uuid, socket) {
@@ -864,19 +1241,94 @@ export default {
             message: utf16toEntities(this.message),
             sender: JSON.parse(localStorage.getItem("userInfo")),
             uuid: uuid,
+            message_type: 1,
           })
         );
       }
     },
+    BeforeUpload(file) {
+      const allow_ext = [
+        "jpg",
+        "gif",
+        "png",
+        "jpeg",
+        "pdf",
+        "word",
+        "xlsx",
+        "xls",
+      ];
+      var ext = file.name.substr(file.name.lastIndexOf(".") + 1);
+      if (allow_ext.indexOf(ext) == -1) {
+        ElMessage.error(
+          `不支持${ext}后缀文件，仅支持后缀名：${allow_ext.join()}`
+        );
+        return false;
+      }
+      this.$refs.progressComponent.classList.remove("animate__fadeOutDown");
+      this.$refs.progressComponent.classList.add("animate__fadeInUp");
+      this.$refs.progressComponent.style.display = "block";
+    },
+    UploadSuccess(response) {
+      ElMessage.success(response.data);
+      this.cleanUpload();
+    },
+    UploadFailed(response) {
+      ElMessage.error(response.data);
+      this.cleanUpload();
+    },
+    uploadSubmit() {
+      this.progress = { percentage: 0, status: undefined };
+      this.$refs.uploadComponent.submit();
+    },
+    cleanUpload() {
+      this.uploadList = [];
+      this.$refs.progressComponent.classList.add("animate__fadeOutDown");
+      this.$refs.progressComponent.classList.remove("animate__fadeInUp");
+    },
+    UploadProgress(evt) {
+      this.progress.percentage = Math.ceil(evt.percent);
+      if (this.progress.percentage == 100) {
+        this.progress.status = "success";
+      }
+    },
+    closeSocket() {
+      // 断开会话
+      if (this.rightInfo.socket.readyState == 1) {
+        this.rightInfo.socket.close();
+        this.cleanHistory(this.rightInfo.uuid);
+        this.sessionList.splice(this.activesession, 1);
+        this.ShowSession = -1;
+        this.activesession = -1;
+        this.rightInfo = {
+          title: "test",
+          closeable: false,
+          members: [],
+          socket: undefined,
+        };
+        this.GroupSessionMore();
+      }
+    },
+    cleanHistory(uuid) {
+      // 清除会话本地记录
+      delete this.SessionHistory[uuid];
+    },
     EnterGroupSession(event) {
+      // 开启群组会话
       var index = event.currentTarget.dataset.index;
       this.ActiveItem(index);
       this.rightInfo = this.groupsessionList[index];
       this.rightInfo.is_group = true;
       this.ShowSession = 0;
     },
+    ShowBusinessCard(index) {
+      this.ActiveItem(index);
+      this.rightInfo = this.contactList[index];
+      this.ShowSession = 0;
+    },
+    JoinFriendSession() {},
   },
-  beforeUnmount() {
+  beforeUpdate() {
+    // 退出前断开所有socket
     for (var i in this.sessionList) {
       if (i.socket != undefined) {
         i.socket.close();
@@ -885,202 +1337,8 @@ export default {
   },
 };
 </script>
-<style>
-.chatroom-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-image: url("../../assets/images/background/chatroom.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  align-items: center;
-}
-
-.chatroom {
-  background: white;
-  border-radius: 15px;
-  padding: 0px;
-  display: flex !important;
-  overflow: hidden;
-  height: 80vh;
-}
-
-.side-menu {
-  width: 60px;
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  border-right: 1px solid #eee;
-}
-
-.side-menu-item {
-  display: flex;
-  margin-top: 25px;
-  flex-direction: column;
-  cursor: pointer;
-  align-items: center;
-}
-
-.side-menu-item:first-child {
-  margin-top: 15px;
-}
-
-.side-menu-item:last-child {
-  margin-bottom: 15px;
-}
-
-.side-menu-item > span {
-  font-size: 13px;
-}
-
-.right-body {
-  flex-grow: 1;
-  display: flex;
-}
-
-.right-body > div {
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.search-btn {
-  display: flex;
-  position: relative;
-  padding: 15px 40px;
-  align-items: center;
-}
-
-.search-btn > svg {
-  position: absolute;
-  left: 50px;
-  transform: translateX(-50%);
-  z-index: 1;
-}
-
-.search-input > .el-input__wrapper {
-  border-radius: 15px;
-}
-
-.chatroom-notify-list {
-  height: calc(100% - 62px);
-}
-
-.notification-item {
-  display: flex;
-  justify-content: flex-start;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.notification-item > span {
-  margin-left: 20px;
-}
-
-.notification-item > img {
-  width: 36px;
-  height: 36px;
-}
-
-.is-active {
-  background: #edeff3;
-}
-
-.active-aside {
-  color: #82b8ff;
-}
-
-.toolbar-format {
-  display: flex;
-  height: 30px;
-  margin: 3px 5px;
-  align-items: center;
-}
-.toolbar-item {
-  position: relative;
-  display: flex;
-  margin-right: 5px;
-  cursor: pointer;
-}
-
-.toolbar-item > div {
-  position: absolute;
-  translate: calc(-50% + 12px) calc(-100% - 5px);
-}
-
-.message-input {
-  height: 110px;
-  width: calc(100% - 12px) !important;
-  margin-bottom: 5px;
-}
-
-.footer-box {
-  position: relative;
-}
-
-.footer-box > div {
-  position: absolute;
-  right: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.footer-box > div > span {
-  margin-right: 10px;
-  color: rgb(181, 181, 181);
-}
-
-.message-input > textarea {
-  resize: none;
-  height: 100%;
-}
-
-.session-introduction {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.object-description > div {
-  display: flex;
-  margin-bottom: 5px;
-}
-
-.object-description {
-  text-align-last: justify;
-  text-align: justify;
-  margin-bottom: 15px;
-}
-
-.object-description > div > span:first-child {
-  width: 64px;
-}
-
-.object-description > div > div {
-  margin-left: 15px;
-}
-
-.object-avatar {
-  margin-bottom: 15px;
-}
-
-.session-box::-webkit-scrollbar {
-  /*滚动条整体样式*/
-  width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
-  height: 1px;
-}
-.session-box::-webkit-scrollbar-thumb {
-  /*滚动条里面小方块*/
-  border-radius: 10px;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
-  background: #dddddd;
-}
-.session-box::-webkit-scrollbar-track {
-  /*滚动条里面轨道*/
-  box-shadow: inset 0 0 5px rgba(231, 231, 231, 0.2);
-  border-radius: 10px;
-  background: #f1f1f1;
+<style scoped>
+.toolbar-progress >>> .el-progress-bar__innerText {
+  display: block;
 }
 </style>

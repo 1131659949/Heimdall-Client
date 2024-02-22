@@ -59,6 +59,7 @@ export default {
   position: relative;
   display: flex !important;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   color: white;
   font-family: 楷体;

@@ -11,20 +11,89 @@
     />
     <div class="wrap">
       <div class="sender-name" v-if="sender.username">
-        {{ sender.username }}
+        <el-tag
+          type="danger"
+          round
+          size="small"
+          effect="dark"
+          v-if="tag != undefined"
+          style="margin: 0px 5px"
+          >{{ tag }}</el-tag
+        >
+        <span>{{ sender.username }}</span>
       </div>
       <div>
-        <span class="content-time">{{
-          friendlyFormatTime(sender.create_time)
-        }}</span>
-        <div class="content">{{ message }}</div>
+        <div>
+          <span
+            class="content-time"
+            v-if="sender.id == local_user.id"
+            style="margin-right: 10px"
+            >{{ friendlyFormatTime(sender.create_time) }}</span
+          >
+          <div class="content">
+            <span v-if="type == 1">{{ entitiestoUtf16(message) }}</span
+            ><el-image
+              :src="message"
+              fit="cover"
+              v-else-if="type == 2"
+              style="background: white"
+              :preview-src-list="[message]"
+            />
+            <div
+              v-else-if="type == 3"
+              @click="downloadFile(message)"
+              style="cursor: pointer"
+            >
+              <div
+                :style="{
+                  display: 'flex',
+                  'flex-direction':
+                    sender.id == local_user.id ? 'row' : 'row-reverse',
+                }"
+              >
+                <el-image
+                  :src="image_logo"
+                  fit="cover"
+                  style="width: 64px; height: 64px"
+                />
+                <div
+                  style="
+                    font-size: 12px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                  "
+                >
+                  <span>{{
+                    message.substring(message.lastIndexOf("/") + 1)
+                  }}</span>
+                  <span
+                    :style="{
+                      'text-align':
+                        sender.id == local_user.id ? 'right' : 'left',
+                      'font-size': '15px',
+                    }"
+                  >
+                    {{ size }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <span
+            class="content-time"
+            v-if="sender.id != local_user.id"
+            style="margin-left: 10px"
+            >{{ friendlyFormatTime(sender.create_time) }}</span
+          >
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { onMounted, ref } from "vue";
-import { friendlyFormatTime } from "../../../utils/transfer";
+import { friendlyFormatTime, entitiestoUtf16 } from "../../../utils/transfer";
 
 export default {
   name: "ChatBubble",
@@ -32,6 +101,10 @@ export default {
     message: {
       type: String,
       required: true,
+    },
+    type: {
+      type: Number,
+      default: 1,
     },
     textColor: {
       type: String,
@@ -45,19 +118,50 @@ export default {
       type: Object,
       required: true,
     },
+    tag: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    size: {
+      type: String,
+      required: false,
+      default: "未知大小",
+    },
   },
   methods: {
     friendlyFormatTime,
+    entitiestoUtf16,
   },
   setup(props, context) {
     var bubble = ref(null);
     var local_user = JSON.parse(localStorage.getItem("userInfo"));
+    var nameplate = {
+      lord: "群主",
+    };
+    const file_ext = {
+      pdf: require("@/assets/images/icons/pdf.png"),
+      xls: require("@/assets/images/icons/xls.png"),
+      xlsx: require("@/assets/images/icons/xls.png"),
+    };
+    var tag = props.tag != "" ? nameplate[props.tag] : undefined;
+    if (props.type == 3) {
+      var image_logo =
+        file_ext[props.message.substring(props.message.lastIndexOf(".") + 1)];
+    }
+
+    function downloadFile(url) {
+      window.open(url);
+    }
     onMounted(() => {
       bubble.value.style.background = props.background;
     });
     return {
       bubble,
       local_user,
+      downloadFile,
+      tag,
+      image_logo,
     };
   },
 };
@@ -122,9 +226,9 @@ export default {
   margin-right: 56px;
 }
 .bubble.left .content {
-  background: #fafafa;
+  background: #ffffff;
   border-color: #c6c6c6;
-  max-width: 300px;
+  max-width: 350px;
   word-wrap: break-word;
 }
 .bubble.left .content:before {
@@ -145,16 +249,16 @@ export default {
 }
 .bubble.right .content:before {
   right: -6px;
-  top: 5px;
+  top: 3px;
   transform: rotate(-45deg);
 }
 
 .sender-name {
   font-size: 14px;
+  margin-bottom: 3px;
 }
 
 .content-time {
-  margin-right: 10px;
   font-size: 12px;
 }
 </style>

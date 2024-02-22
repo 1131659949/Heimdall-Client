@@ -1,0 +1,59 @@
+.backstage-search-article {
+  width: 150px !important;
+}
+
+.add-article-header {
+  background-color: antiquewhite;
+  padding: 7px 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  div {
+    display: flex;
+    align-items: center;
+    img {
+      margin-right: 3px;
+      height: 24px;
+    }
+  }
+
+  .back {
+    cursor: pointer;
+    padding: 2px 3px;
+    border-radius: 3px;
+  }
+}
+
+.add-article {
+  display: none;
+  position: absolute;
+  top: 0px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.back:hover {
+  background-color: rgb(225, 225, 225);
+}
+
+.add-article-form {
+  margin-top: 25px;
+}
+
+.article-pagination {
+  margin-top: 10px;
+  .el-pagination {
+    justify-content: center;
+  }
+}
+
+.is-visible {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+.md-editor .mk-cute-theme {
+  background-image: none;
+}

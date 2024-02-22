@@ -1,0 +1,187 @@
+:root {
+  --global-font-size: 15.5px;
+}
+
+.common-header {
+  width: 100%;
+  height: 60px;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  position: relative;
+  display: flex;
+}
+
+.user-nav {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.contain {
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  width: 100%;
+}
+
+.user-center div {
+  display: flex;
+  align-items: center;
+  padding: 5px 5px;
+  cursor: pointer;
+  line-height: normal;
+}
+
+.user-center div:hover {
+  background-color: rgb(203, 203, 203);
+}
+
+.user-center div span {
+  margin-left: 10px;
+}
+
+.avatar-user {
+  transition: all 1s;
+}
+
+.avatar-user:hover {
+  transform: rotate(360deg);
+}
+
+@media screen and (min-width: 992px) {
+  .contain {
+    max-width: 960px;
+  }
+}
+
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  color: white;
+  margin-left: 15px;
+}
+
+#header {
+  position: fixed;
+  width: 100%;
+  z-index: 2025;
+}
+
+#nav {
+  position: relative;
+  border: none;
+  display: flex;
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.nav-item {
+  padding: 10px 20px;
+}
+
+.nav-item a {
+  display: flex;
+  line-height: 1;
+}
+
+nav a {
+  font-weight: normal !important;
+  color: white;
+}
+
+div,
+header {
+  font-family: "pingfang";
+}
+
+@font-face {
+  font-family: "pingfang";
+  src: url("../../assets/fonts/pingfang.ttf");
+}
+#nav li {
+  margin: auto;
+}
+#nav li a {
+  position: relative;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  z-index: 3;
+}
+
+.slide1,
+.slide2 {
+  position: absolute;
+  display: inline-block;
+  height: 60px;
+  border-radius: 10em;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1.05);
+}
+
+.slide1 {
+  background-color: rgb(170, 190, 255);
+  z-index: 2;
+}
+
+.slide2 {
+  opacity: 0;
+  background-color: rgba(170, 190, 255, 0.5);
+  z-index: 1;
+  box-shadow: 0 0 20px #ffffffaa inset;
+}
+
+.squeeze {
+  transform: scale(0.9);
+}
+
+.theme_1 {
+  background-image: url("../../assets/images/background/2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  font-size: var(--global-font-size);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  background-color: white;
+  div {
+    text-align: center;
+    padding-bottom: 3px;
+  }
+
+  .badge-list img:nth-child(n) {
+    margin-right: 10px;
+  }
+  .badge-list img:last-child {
+    margin-right: 0px;
+  }
+}
+
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+body::-webkit-scrollbar-corner {
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}

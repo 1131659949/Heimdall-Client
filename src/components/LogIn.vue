@@ -28,7 +28,7 @@
         >
       </el-form-item>
     </el-form>
-    <div>
+    <div style="display: flex; justify-content: center">
       <el-button type="danger" @click="submit">登录</el-button>
       <el-button type="danger" @click="register" style="margin-left: 35px"
         >注册</el-button

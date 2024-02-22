@@ -5,6 +5,7 @@
       flex-direction: column;
       height: 100%;
       font-family: 'pingfang';
+      line-height: 1.4;
     "
   >
     <el-menu
@@ -33,15 +34,26 @@
         />
       </div>
     </el-menu>
-    <router-view />
+    <router-view :me="me" />
   </div>
 </template>
 <script>
+import requests from "@/request/request";
 export default {
   name: "ChatRoomBase",
+  mounted() {
+    requests({
+      method: "get",
+      Headers: { "Content-Type": "multipart/form-data" },
+      url: "/api/user/",
+    }).then((res) => {
+      this.me = res.data.data;
+    });
+  },
   data() {
     return {
       activeIndex: 1,
+      me: {},
     };
   },
 };
