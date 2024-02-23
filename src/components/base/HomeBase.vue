@@ -5,16 +5,14 @@
   ></div>
   <div :class="background_theme[current_theme]" style="min-height: 100vh">
     <header id="header">
-      <nav class="common-header">
+      <nav
+        id="nav-header"
+        class="common-header header-type-2 animate__animated"
+      >
         <div class="contain">
-          <el-image
-            :src="require('@/assets/images/logo/logo4.png')"
-            style="height: 44px"
-          ></el-image>
+          <span style="font-size: 20px"><b>HEIMDALL</b></span>
           <div class="header-nav" v-if="at_top">
             <ul id="nav">
-              <li class="slide1"></li>
-              <li class="slide2"></li>
               <li v-for="nav in nav_list" :key="nav" class="nav-item">
                 <a :href="nav.url" name="items"
                   ><div
@@ -172,13 +170,23 @@ function logOut() {
   }
 }
 
-window.addEventListener("scroll", function () {
-  if (document.documentElement.scrollTop == 0) {
-    // console.log(document.getElementsByName("items"));
-    document.getElementById("header").style.background = "none";
+window.addEventListener("mousewheel", (e) => {
+  if (e.deltaY > 0) {
+    document.getElementById("nav-header").classList.remove("animate__fadeIn");
+    document.getElementById("nav-header").classList.add("animate__fadeOut");
   } else {
-    document.getElementById("header").style.background =
-      "linear-gradient(rgba(0,0,0,1),rgba(0,0,0,0)";
+    document.getElementById("nav-header").classList.remove("animate__fadeOut");
+    document.getElementById("nav-header").classList.add("animate__fadeIn");
+  }
+});
+
+window.addEventListener("scroll", function () {
+  const nav = document.getElementById("nav-header").classList;
+  console.log(nav);
+  if (document.documentElement.scrollTop == 0) {
+    nav.replace("header-type-2", "header-type-1");
+  } else {
+    nav.replace("header-type-1", "header-type-2");
   }
 });
 const nav_list = [
