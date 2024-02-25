@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import LogIn from "@/components/LogIn"
 import UserBase from "@/components/base/UserBase"
 import ChatRoomBase from "@/components/base/ChatRoomBase"
-import HomePage from "@/components/heimdall/HomePage"
+import HomePageBase from "@/components/base/HomePageBase"
 import ChatRoom from "@/components/chatroom/ChatRoom"
 import HomeBase from "@/components/base/HomeBase"
 import requests from "@/request/request.js";
@@ -11,6 +11,8 @@ import UserBackstage from "@/components/backstage/UserBackstage"
 import UserAuth from "@/components/user/UserAuth"
 import ArticleManage from "@/components/backstage/ArticleManage"
 import ArticleContent from "@/components/heimdall/ArticleContent"
+import HomePage from "@/components/heimdall/HomePage"
+import SearchPage from "@/components/heimdall/SearchPage"
 
 
 const routes = [
@@ -30,10 +32,22 @@ const routes = [
     component: HomeBase,
     children: [
       {
-        path: "/",
-        name: "home",
-        component: HomePage,
-        meta: { requiresAuth: false }
+        path: "/homepageBase",
+        component: HomePageBase,
+        meta: { requiresAuth: false },
+        children: [
+          {
+            path: "/",
+            name: "home",
+            component: HomePage
+          },
+          {
+            path: "/search",
+            name: "search",
+            component: SearchPage
+          }
+
+        ]
       }, {
         path: "/article/:id/",
         name: "article",
@@ -82,6 +96,9 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(), // 路由不带#
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { left: 0, top: 0 }
+  }
 });
 
 function clean_account_info() {

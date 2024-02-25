@@ -1,5 +1,19 @@
+:root {
+  --card-description-text-color: rgb(171, 171, 171);
+  --card-description-small-size: 13px;
+}
+
 .location-center {
-  display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.article-card,
+.search-card {
+  margin-bottom: 25px;
+}
+
+.flex-layout,
+.location-center {
+  display: flex;
 }

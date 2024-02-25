@@ -1,0 +1,40 @@
+.show-keyword {
+  border-radius: 10px;
+  .search-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.search-format {
+  width: 75%;
+}
+
+.search-kw-text {
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.card-description {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0px 15px;
+}
+
+.article-date {
+  color: var(--card-description-text-color);
+  font-size: var(--card-description-small-size);
+}
+
+.direction-right,
+.description-left {
+  direction: ltr;
+}
+
+.direction-left,
+.description-right {
+  direction: rtl;
+}

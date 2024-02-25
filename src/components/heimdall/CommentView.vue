@@ -1,7 +1,12 @@
 <template>
   <div class="comment-view-layout">
     <div class="comment-user-avatar">
-      <el-avatar :size="35" shape="square" :src="user.user_avatar" />
+      <el-avatar
+        :alt="user.username"
+        :size="35"
+        shape="square"
+        :src="user.user_avatar"
+      />
     </div>
     <div class="comment-detail">
       <div class="comment--user-info">

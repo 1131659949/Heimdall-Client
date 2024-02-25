@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="loading animate__animated" ref="loading">
-      <img :src="require('@/assets/images/loading/loadinganimation.gif')" />
+      <JumpLoading
+        :src="'VueCompilerError: Error parsing JavaScript expression: Unexpected token (1:83)'"
+        :alt="'test'"
+      ></JumpLoading>
     </div>
     <div class="article-background">
       <img
@@ -10,6 +13,7 @@
             ? article_information.cover
             : require('@/assets/images/cover/default1.jpeg')
         "
+        alt="文章封面"
       />
       <div
         style="
@@ -180,7 +184,7 @@
           <div class="content-toolset">
             <div class="inner__toolset" id="toolsets">
               <div class="share-article toolset-item">
-                <button>
+                <button id="share">
                   <svg
                     t="1708692437754"
                     class="icon"
@@ -199,8 +203,8 @@
                   </svg>
                 </button>
               </div>
-              <div class="like-article toolset-item">
-                <button @click="Onclick" ref="share">
+              <div :class="{ 'like-article': false, 'toolset-item': true }">
+                <button @click="LikeArticle" id="like">
                   <svg
                     t="1708692186720"
                     class="icon"
@@ -224,7 +228,6 @@
                   </svg>
                 </button>
               </div>
-              <div class="like-article toolset-item"></div>
             </div>
           </div>
           <el-card class="content">
@@ -306,6 +309,11 @@
                   </div>
                 </div>
               </div>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="article_comments.count"
+              />
             </div>
           </el-card>
           <div class="aside-catalog">
@@ -373,11 +381,13 @@
 </template>
 <script setup>
 import { useRoute } from "vue-router";
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import requests from "@/request/request";
 import "@/assets/css/articleContent.css";
 import CommentView from "./CommentView.vue";
 import { MdPreview, MdCatalog } from "md-editor-v3";
+import { ElMessage } from "element-plus";
+import JumpLoading from "../loading/JumpLoading.vue";
 const route = useRoute();
 const article_id = route.params.id;
 const url = "/api/article/" + String(article_id);
@@ -388,22 +398,27 @@ var exist = ref(false); // 判断文章是否存在
 var loading = ref(); // 加载动画元素dom
 var article_information = ref({}); // 文章信息
 var article_comments = ref({});
-var share = ref();
 
-window.addEventListener("scroll", () => {
-  var scroll_height = document.documentElement.scrollTop;
-  if (scroll_height > document.getElementById("content").offsetTop) {
-    document.getElementById("catalog").classList.add("fix-catalog");
-  }
-});
-
-function Onclick() {}
+function LikeArticle() {
+  requests({
+    method: "post",
+    Headers: { "Content-Type": "multipart/form-data" },
+    url: "/api/article/like/",
+    data: { article_id: article_id },
+  }).then((res) => {
+    if (res.data.code === 10000) {
+      ElMessage.success(res.data.data);
+    } else {
+      ElMessage.error(res.data.data);
+    }
+  });
+}
 
 function getArticle() {
   requests({
     method: "get",
-    Headers: { "Content-Type": "multipart/form-data" },
     url: url,
+    data: { article_id: article_id },
   }).then((res) => {
     loading.value.classList.add("animate__fadeOut"); // 关闭加载动画
     setTimeout(() => {
@@ -425,10 +440,23 @@ function getComment() {
     article_comments.value = res.data;
   });
 }
-
 function init() {
   getArticle();
   getComment();
 }
 init();
+const scroll_function = () => {
+  var scroll_height = document.documentElement.scrollTop;
+  let dom = document.getElementById("catalog");
+  if (scroll_height > dom.offsetTop) {
+    dom.classList.add("fix-catalog");
+  }
+};
+onMounted(() => {
+  window.addEventListener("scroll", scroll_function);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", scroll_function);
+});
 </script>

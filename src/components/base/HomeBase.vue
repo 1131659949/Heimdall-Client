@@ -1,8 +1,4 @@
 <template>
-  <div
-    class="back-to-top cd-top faa-float animated cd-is-visible"
-    style="top: -999px; right: 20px"
-  ></div>
   <div :class="background_theme[current_theme]" style="min-height: 100vh">
     <header id="header">
       <nav
@@ -79,6 +75,7 @@
                 <template #reference>
                   <el-avatar
                     :src="user.user_avatar"
+                    alt="用户头像"
                     class="avatar-user"
                   ></el-avatar>
                 </template>
@@ -98,9 +95,10 @@
       </div>
       <div style="display: flex; align-items: center; justify-content: center">
         <b>Author - 小火龙</b
-        ><img
+        ><el-image
           :src="require('@/assets/images/icons/小火龙.png')"
           style="width: 25px"
+          lazy
         />
       </div>
       <div class="fouter-item">
@@ -129,7 +127,7 @@
 import "@/assets/css/homebase.css";
 import "@/assets/css/cat.css";
 import "@/assets/js/cat.js";
-import { defineExpose, ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted, getCurrentInstance } from "vue";
 import requests from "@/request/request";
 import { ElMessage } from "element-plus";
 
@@ -182,7 +180,6 @@ window.addEventListener("mousewheel", (e) => {
 
 window.addEventListener("scroll", function () {
   const nav = document.getElementById("nav-header").classList;
-  console.log(nav);
   if (document.documentElement.scrollTop == 0) {
     nav.replace("header-type-2", "header-type-1");
   } else {
@@ -192,7 +189,7 @@ window.addEventListener("scroll", function () {
 const nav_list = [
   {
     title: "首页",
-    url: "#",
+    url: "/",
     icon: require("../../assets/images/icons/主页.png"),
   },
   {
@@ -217,13 +214,4 @@ var background_theme = {
 };
 var current_theme = "normal";
 var at_top = true;
-defineExpose({
-  nav_list,
-  nav_setting,
-  background_theme,
-  current_theme,
-  at_top,
-  user,
-  second,
-});
 </script>
