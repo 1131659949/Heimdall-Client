@@ -92,28 +92,6 @@
   b {
     font-size: 24px;
   }
-
-  .information-line {
-    display: flex;
-    font-size: 14px;
-
-    div {
-      display: flex;
-      align-items: center;
-      margin: 0px 9px;
-      svg {
-        margin-right: 1px;
-      }
-    }
-
-    div:first-child {
-      margin-left: 0px;
-    }
-
-    div::last-child {
-      margin-right: 0px;
-    }
-  }
 }
 
 hr {

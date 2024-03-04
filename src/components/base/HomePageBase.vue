@@ -56,7 +56,7 @@
   <section style="height: 3000px; background-color: white">
     <div class="layout">
       <div class="post-content">
-        <router-view></router-view>
+        <router-view :key="$route.query"></router-view>
       </div>
       <div class="aside-card">
         <el-card class="card-layout is-center"
@@ -64,6 +64,7 @@
             <el-avatar
               :src="require('@/assets/images/logo/avatar.jpg')"
               :size="110"
+              alt="用户头像"
             />
             <b><div style="font-size: 22px">Heimdall</div></b>
             <div>
@@ -74,21 +75,21 @@
             </div>
           </div>
           <div class="site-data is-center">
-            <a href="#"
+            <a href="javascript:void(0)"
               ><div>文章</div>
               <div>0</div></a
             >
-            <a href="#">
+            <a href="javascript:void(0)">
               <div>分类</div>
               <div>0</div>
             </a>
-            <a href="#"
+            <a href="javascript:void(0)"
               ><div>访问量</div>
               <div>0</div></a
             >
           </div>
           <div class="is-center social-icons">
-            <a href="#" target="_blank" title="微信"
+            <a href="https://github.com/1131659949" target="_blank" title="微信"
               ><svg
                 t="1707321887895"
                 class="icon"
@@ -105,7 +106,10 @@
                   p-id="1022"
                 ></path>
               </svg> </a
-            ><a href="#" target="_blank" title="Gitee"
+            ><a
+              href="https://gitee.com/ouyanglearnning"
+              target="_blank"
+              title="Gitee"
               ><svg
                 t="1707321817722"
                 class="icon"
@@ -136,7 +140,10 @@
                   d="M511.968 73.152q119.424 0 220.288 58.848t159.712 159.712 58.848 220.288q0 143.424-83.712 258.016t-216.288 158.56q-15.424 2.848-22.848-4t-7.424-17.152q0-1.728 0.288-43.712t0.288-76.864q0-55.424-29.728-81.152 32.576-3.424 58.56-10.272t53.728-22.272 46.272-38.016 30.272-60 11.712-86.016q0-68-45.152-117.728 21.152-52-4.576-116.576-16-5.152-46.272 6.272t-52.576 25.152l-21.728 13.728q-53.152-14.848-109.728-14.848t-109.728 14.848q-9.152-6.272-24.288-15.424t-47.712-22.016-48.576-7.712q-25.728 64.576-4.576 116.576-45.152 49.728-45.152 117.728 0 48.576 11.712 85.728t30.016 60 46.016 38.272 53.728 22.272 58.56 10.272q-22.272 20.576-28 58.848-12 5.728-25.728 8.576t-32.576 2.848-37.44-12.288-31.712-35.712q-10.848-18.272-27.712-29.728t-28.288-13.728l-11.424-1.728q-12 0-16.576 2.56t-2.848 6.56 5.152 8 7.424 6.848l4 2.848q12.576 5.728 24.864 21.728t18.016 29.152l5.728 13.152q7.424 21.728 25.152 35.136t38.272 17.152 39.712 4 31.712-2.016l13.152-2.272q0 21.728 0.288 50.56t0.288 31.136q0 10.272-7.424 17.152t-22.848 4q-132.576-44-216.288-158.56t-83.712-258.016q0-119.424 58.848-220.288t159.712-159.712 220.288-58.848zM239.392 703.424q1.728-4-4-6.848-5.728-1.728-7.424 1.152-1.728 4 4 6.848 5.152 3.424 7.424-1.152zM257.12 722.848q4-2.848-1.152-9.152-5.728-5.152-9.152-1.728-4 2.848 1.152 9.152 5.728 5.728 9.152 1.728zM274.272 748.576q5.152-4 0-10.848-4.576-7.424-9.728-3.424-5.152 2.848 0 10.272t9.728 4zM298.272 772.576q4.576-4.576-2.272-10.848-6.848-6.848-11.424-1.728-5.152 4.576 2.272 10.848 6.848 6.848 11.424 1.728zM330.848 786.848q1.728-6.272-7.424-9.152-8.576-2.272-10.848 4t7.424 8.576q8.576 3.424 10.848-3.424zM366.848 789.728q0-7.424-9.728-6.272-9.152 0-9.152 6.272 0 7.424 9.728 6.272 9.152 0 9.152-6.272zM399.968 784q-1.152-6.272-10.272-5.152-9.152 1.728-8 8.576t10.272 4.576 8-8z"
                   p-id="6213"
                 ></path></svg></a
-            ><a href="#" target="_blank" title="bilibili哔哩哔哩"
+            ><a
+              href="https://space.bilibili.com/282208405?spm_id_from=333.1007.0.0"
+              target="_blank"
+              title="bilibili哔哩哔哩"
               ><svg
                 t="1707321972141"
                 class="icon"
@@ -168,6 +175,7 @@
               id="box"
               placeholder="搜索文章标题，内容"
               class="search__box"
+              v-model="search_kw"
             />
             <svg
               t="1707484506967"
@@ -176,6 +184,8 @@
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
               p-id="5998"
+              style="cursor: pointer"
+              @click="router.push({ path: 'search', query: { kw: search_kw } })"
             >
               <path
                 d="M483.0208 483.5328m-375.6544 0a375.6544 375.6544 0 1 0 751.3088 0 375.6544 375.6544 0 1 0-751.3088 0Z"
@@ -225,9 +235,11 @@
   </section>
 </template>
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import "@/assets/css/wave.css";
 import "@/assets/css/homepage.css";
+import router from "@/router";
+var search_kw = ref("");
 
 onMounted(() => {
   var typing = {
@@ -319,7 +331,7 @@ onMounted(() => {
       }
     },
 
-    start() {
+    async start() {
       //开始
       typing.backspace();
     },

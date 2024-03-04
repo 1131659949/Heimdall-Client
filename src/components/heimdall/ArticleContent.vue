@@ -2,8 +2,8 @@
   <div>
     <div class="loading animate__animated" ref="loading">
       <JumpLoading
-        :src="'VueCompilerError: Error parsing JavaScript expression: Unexpected token (1:83)'"
-        :alt="'test'"
+        :src="require('@/assets/images/me.jpg')"
+        alt=""
       ></JumpLoading>
     </div>
     <div class="article-background">
@@ -448,7 +448,7 @@ init();
 const scroll_function = () => {
   var scroll_height = document.documentElement.scrollTop;
   let dom = document.getElementById("catalog");
-  if (scroll_height > dom.offsetTop) {
+  if (dom && scroll_height > dom.offsetTop) {
     dom.classList.add("fix-catalog");
   }
 };

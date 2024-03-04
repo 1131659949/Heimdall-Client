@@ -92,10 +92,14 @@
   display: table;
   width: 100%;
   table-layout: fixed;
-}
-
-.site-data > a {
-  display: table-cell;
+  div {
+    color: black !important;
+    cursor: default;
+  }
+  a {
+    display: table-cell;
+    -webkit-user-drag: none;
+  }
 }
 
 .social-icons a:nth-child(n) {

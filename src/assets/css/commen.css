@@ -9,11 +9,72 @@
 }
 
 .article-card,
-.search-card {
+.search-kw-card {
   margin-bottom: 25px;
 }
 
 .flex-layout,
 .location-center {
   display: flex;
+}
+
+.information-line {
+  display: flex;
+  font-size: 14px;
+
+  div {
+    display: flex;
+    align-items: center;
+    margin: 0px 9px;
+    svg {
+      margin-right: 1px;
+    }
+  }
+
+  div:first-child {
+    margin-left: 0px;
+  }
+
+  div:last-child {
+    margin-right: 0px;
+  }
+}
+
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+.el-table .success-row {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
+
+.el-table .danger-row {
+  --el-table-tr-bg-color: var(--el-color-error-light-7);
+}
+
+.el-table .critical-row {
+  --el-table-tr-bg-color: var(--el-color-error-dark-2);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgb(207, 207, 207);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(136, 136, 136);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgb(100, 100, 100);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgb(68, 68, 68);
+  border-radius: 10px;
 }

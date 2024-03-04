@@ -3,7 +3,7 @@
     <header id="header">
       <nav
         id="nav-header"
-        class="common-header header-type-2 animate__animated"
+        class="common-header header-type-1 animate__animated"
       >
         <div class="contain">
           <span style="font-size: 20px"><b>HEIMDALL</b></span>
@@ -109,16 +109,235 @@
         }}秒啦！
       </div>
       <div class="badge-list">
-        <img
-          alt="Static Badge"
-          src="https://img.shields.io/badge/Python-3.10-blue?logo=python"
-        /><img
-          alt="Static Badge"
-          src="https://img.shields.io/badge/Source-Github-red?logo=github"
-        /><img
-          alt="Static Badge"
-          src="https://img.shields.io/badge/Analytics-51la-green?logo=simpleanalytics"
-        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="101"
+          height="20"
+          role="img"
+          aria-label="Python: 3.10"
+        >
+          <title>Python: 3.10</title>
+          <linearGradient id="s" x2="0" y2="100%">
+            <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+            <stop offset="1" stop-opacity=".1" />
+          </linearGradient>
+          <clipPath id="r">
+            <rect width="101" height="20" rx="3" fill="#fff" />
+          </clipPath>
+          <g clip-path="url(#r)">
+            <rect width="66" height="20" fill="#555" />
+            <rect x="66" width="35" height="20" fill="#007ec6" />
+            <rect width="101" height="20" fill="url(#s)" />
+          </g>
+          <g
+            fill="#fff"
+            text-anchor="middle"
+            font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+            text-rendering="geometricPrecision"
+            font-size="110"
+          >
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              xlink:href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjMzc3NkFCIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+UHl0aG9uPC90aXRsZT48cGF0aCBkPSJNMTQuMjUuMThsLjkuMi43My4yNi41OS4zLjQ1LjMyLjM0LjM0LjI1LjM0LjE2LjMzLjEuMy4wNC4yNi4wMi4yLS4wMS4xM1Y4LjVsLS4wNS42My0uMTMuNTUtLjIxLjQ2LS4yNi4zOC0uMy4zMS0uMzMuMjUtLjM1LjE5LS4zNS4xNC0uMzMuMS0uMy4wNy0uMjYuMDQtLjIxLjAySDguNzdsLS42OS4wNS0uNTkuMTQtLjUuMjItLjQxLjI3LS4zMy4zMi0uMjcuMzUtLjIuMzYtLjE1LjM3LS4xLjM1LS4wNy4zMi0uMDQuMjctLjAyLjIxdjMuMDZIMy4xN2wtLjIxLS4wMy0uMjgtLjA3LS4zMi0uMTItLjM1LS4xOC0uMzYtLjI2LS4zNi0uMzYtLjM1LS40Ni0uMzItLjU5LS4yOC0uNzMtLjIxLS44OC0uMTQtMS4wNS0uMDUtMS4yMy4wNi0xLjIyLjE2LTEuMDQuMjQtLjg3LjMyLS43MS4zNi0uNTcuNC0uNDQuNDItLjMzLjQyLS4yNC40LS4xNi4zNi0uMS4zMi0uMDUuMjQtLjAxaC4xNmwuMDYuMDFoOC4xNnYtLjgzSDYuMThsLS4wMS0yLjc1LS4wMi0uMzcuMDUtLjM0LjExLS4zMS4xNy0uMjguMjUtLjI2LjMxLS4yMy4zOC0uMi40NC0uMTguNTEtLjE1LjU4LS4xMi42NC0uMS43MS0uMDYuNzctLjA0Ljg0LS4wMiAxLjI3LjA1em0tNi4zIDEuOThsLS4yMy4zMy0uMDguNDEuMDguNDEuMjMuMzQuMzMuMjIuNDEuMDkuNDEtLjA5LjMzLS4yMi4yMy0uMzQuMDgtLjQxLS4wOC0uNDEtLjIzLS4zMy0uMzMtLjIyLS40MS0uMDktLjQxLjA5em0xMy4wOSAzLjk1bC4yOC4wNi4zMi4xMi4zNS4xOC4zNi4yNy4zNi4zNS4zNS40Ny4zMi41OS4yOC43My4yMS44OC4xNCAxLjA0LjA1IDEuMjMtLjA2IDEuMjMtLjE2IDEuMDQtLjI0Ljg2LS4zMi43MS0uMzYuNTctLjQuNDUtLjQyLjMzLS40Mi4yNC0uNC4xNi0uMzYuMDktLjMyLjA1LS4yNC4wMi0uMTYtLjAxaC04LjIydi44Mmg1Ljg0bC4wMSAyLjc2LjAyLjM2LS4wNS4zNC0uMTEuMzEtLjE3LjI5LS4yNS4yNS0uMzEuMjQtLjM4LjItLjQ0LjE3LS41MS4xNS0uNTguMTMtLjY0LjA5LS43MS4wNy0uNzcuMDQtLjg0LjAxLTEuMjctLjA0LTEuMDctLjE0LS45LS4yLS43My0uMjUtLjU5LS4zLS40NS0uMzMtLjM0LS4zNC0uMjUtLjM0LS4xNi0uMzMtLjEtLjMtLjA0LS4yNS0uMDItLjIuMDEtLjEzdi01LjM0bC4wNS0uNjQuMTMtLjU0LjIxLS40Ni4yNi0uMzguMy0uMzIuMzMtLjI0LjM1LS4yLjM1LS4xNC4zMy0uMS4zLS4wNi4yNi0uMDQuMjEtLjAyLjEzLS4wMWg1Ljg0bC42OS0uMDUuNTktLjE0LjUtLjIxLjQxLS4yOC4zMy0uMzIuMjctLjM1LjItLjM2LjE1LS4zNi4xLS4zNS4wNy0uMzIuMDQtLjI4LjAyLS4yMVY2LjA3aDIuMDlsLjE0LjAxem0tNi40NyAxNC4yNWwtLjIzLjMzLS4wOC40MS4wOC40MS4yMy4zMy4zMy4yMy40MS4wOC40MS0uMDguMzMtLjIzLjIzLS4zMy4wOC0uNDEtLjA4LS40MS0uMjMtLjMzLS4zMy0uMjMtLjQxLS4wOC0uNDEuMDh6Ii8+PC9zdmc+"
+            />
+            <text
+              aria-hidden="true"
+              x="425"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="390"
+            >
+              Python
+            </text>
+            <text
+              x="425"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="390"
+            >
+              Python
+            </text>
+            <text
+              aria-hidden="true"
+              x="825"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="250"
+            >
+              3.10
+            </text>
+            <text
+              x="825"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="250"
+            >
+              3.10
+            </text>
+          </g></svg
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="113"
+          height="20"
+          role="img"
+          aria-label="Source: Github"
+        >
+          <title>Source: Github</title>
+          <linearGradient id="s" x2="0" y2="100%">
+            <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+            <stop offset="1" stop-opacity=".1" />
+          </linearGradient>
+          <clipPath id="r">
+            <rect width="113" height="20" rx="3" fill="#fff" />
+          </clipPath>
+          <g clip-path="url(#r)">
+            <rect width="66" height="20" fill="#555" />
+            <rect x="66" width="47" height="20" fill="#e05d44" />
+            <rect width="113" height="20" fill="url(#s)" />
+          </g>
+          <g
+            fill="#fff"
+            text-anchor="middle"
+            font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+            text-rendering="geometricPrecision"
+            font-size="110"
+          >
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              xlink:href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSJ3aGl0ZXNtb2tlIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+"
+            />
+            <text
+              aria-hidden="true"
+              x="425"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="390"
+            >
+              Source
+            </text>
+            <text
+              x="425"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="390"
+            >
+              Source
+            </text>
+            <text
+              aria-hidden="true"
+              x="885"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="370"
+            >
+              Github
+            </text>
+            <text
+              x="885"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="370"
+            >
+              Github
+            </text>
+          </g></svg
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          width="109"
+          height="20"
+          role="img"
+          aria-label="Analytics: 51la"
+        >
+          <title>Analytics: 51la</title>
+          <linearGradient id="s" x2="0" y2="100%">
+            <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+            <stop offset="1" stop-opacity=".1" />
+          </linearGradient>
+          <clipPath id="r">
+            <rect width="109" height="20" rx="3" fill="#fff" />
+          </clipPath>
+          <g clip-path="url(#r)">
+            <rect width="76" height="20" fill="#555" />
+            <rect x="76" width="33" height="20" fill="#97ca00" />
+            <rect width="109" height="20" fill="url(#s)" />
+          </g>
+          <g
+            fill="#fff"
+            text-anchor="middle"
+            font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+            text-rendering="geometricPrecision"
+            font-size="110"
+          >
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              xlink:href="data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkY0RjY0IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U2ltcGxlIEFuYWx5dGljczwvdGl0bGU+PHBhdGggZD0iTTEuMDE5IDEzLjAxOWgzLjg0OVYyNGgtMy44NXptOC45NDMtNi42OGgzLjg1VjI0aC0zLjg1ek0xOS4xMzIgMGgzLjg1djI0aC0zLjg1eiIvPjwvc3ZnPg=="
+            />
+            <text
+              aria-hidden="true"
+              x="475"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="490"
+            >
+              Analytics
+            </text>
+            <text
+              x="475"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="490"
+            >
+              Analytics
+            </text>
+            <text
+              aria-hidden="true"
+              x="915"
+              y="150"
+              fill="#010101"
+              fill-opacity=".3"
+              transform="scale(.1)"
+              textLength="230"
+            >
+              51la
+            </text>
+            <text
+              x="915"
+              y="140"
+              transform="scale(.1)"
+              fill="#fff"
+              textLength="230"
+            >
+              51la
+            </text>
+          </g>
+        </svg>
       </div>
     </footer>
   </div>
@@ -198,16 +417,6 @@ const nav_list = [
     icon: require("../../assets/images/icons/图.png"),
   },
 ];
-var nav_setting = {
-  top: {
-    color: "#000",
-    opacity: 0,
-  },
-  fixed: {
-    color: "#fff",
-    background: "#000",
-  },
-};
 
 var background_theme = {
   normal: "theme_1",

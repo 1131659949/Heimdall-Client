@@ -13,6 +13,7 @@ import ArticleManage from "@/components/backstage/ArticleManage"
 import ArticleContent from "@/components/heimdall/ArticleContent"
 import HomePage from "@/components/heimdall/HomePage"
 import SearchPage from "@/components/heimdall/SearchPage"
+import LogManage from "@/components/backstage/LogManage"
 
 
 const routes = [
@@ -86,6 +87,12 @@ const routes = [
           path: "ArticleManage",
           name: "ArticleManage",
           component: ArticleManage,
+          meta: { requiresAuth: false }
+        },
+        {
+          path: "log",
+          name: "log",
+          component: LogManage,
           meta: { requiresAuth: false }
         }
       ]

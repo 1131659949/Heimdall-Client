@@ -132,6 +132,8 @@ header {
 @font-face {
   font-family: "pingfang";
   src: url("../../assets/fonts/pingfang.ttf");
+  font-style: normal;
+  font-display: swap;
 }
 #nav li {
   margin: auto;
@@ -194,10 +196,10 @@ footer {
     padding-bottom: 3px;
   }
 
-  .badge-list img:nth-child(n) {
+  .badge-list svg:nth-child(n) {
     margin-right: 10px;
   }
-  .badge-list img:last-child {
+  .badge-list svg:last-child {
     margin-right: 0px;
   }
 }

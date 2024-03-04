@@ -76,9 +76,4 @@ export default {
   margin: 0px 20px;
   cursor: pointer;
 }
-
-@font-face {
-  font-family: "pingfang";
-  src: url("../../assets/fonts/pingfang.ttf");
-}
 </style>

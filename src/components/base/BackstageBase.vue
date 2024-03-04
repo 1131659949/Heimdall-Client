@@ -28,7 +28,7 @@
             ></el-avatar>
           </div></div
       ></el-header>
-      <el-container>
+      <el-container style="height: 100%">
         <el-aside style="width: auto" class="backstage-aside">
           <el-menu
             class="backstage-menu"
@@ -57,6 +57,17 @@
             <el-menu-item index="4">
               <el-icon><Comment /></el-icon>
               <template #title>评论管理</template>
+            </el-menu-item>
+            <el-menu-item
+              index="5"
+              @click="
+                () => {
+                  this.$router.push('/backstage/log');
+                }
+              "
+            >
+              <el-icon><Tickets /></el-icon>
+              <template #title>日志管理</template>
             </el-menu-item>
           </el-menu>
         </el-aside>
