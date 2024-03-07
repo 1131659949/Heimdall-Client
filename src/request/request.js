@@ -11,6 +11,7 @@ requests.interceptors.request.use(config => {
     var token = Cookies.get("token")
     if (token != undefined) {
         config.headers.Authorization = "token " + token;
+        config.headers['Access-Control-Allow-Origin'] = 'Authorization'
     }
     return config
 }, err => {

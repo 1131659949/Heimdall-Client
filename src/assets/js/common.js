@@ -1,5 +1,6 @@
 import requests from "@/request/request"
 import { ElNotification } from 'element-plus'
+import axios from "axios"
 function SendNotification(actor, verb, recipient, level = "info") {
     requests({
         method: "post",
@@ -44,8 +45,37 @@ function switchClass(id, c1, c2, callback = null) {
 function stopPropagation(e) {
     e.stopPropagation();
 }
+
+
+async function GetProjectInformation(arr, url) {
+    await axios.get(url).then((res) => {
+        if (!res) {
+            return []
+        }
+        res.forEach(element => {
+            arr.push(element)
+        });
+    }).catch((err) => {
+        console.log("Github访问限制");
+        return []
+    })
+    return subscribers
+}
+
+const io = new IntersectionObserver((entries) => {
+    for (let entry of entries) {
+        if (entry.isIntersecting) {
+            let dom = entry.target;
+            dom.classList.add("animate__fadeInUp");
+            io.unobserve(dom);
+        }
+    }
+});
+
 export {
     SendNotification,
     switchClass,
-    stopPropagation
+    stopPropagation,
+    GetProjectInformation,
+    io
 }

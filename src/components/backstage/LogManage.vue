@@ -74,7 +74,7 @@
   <el-descriptions
     title="信息详情"
     :column="1"
-    class="log-descriptions animate__animated custom-scrollbar"
+    class="log-descriptions animation"
     id="log"
     @click="stopPropagation($event)"
   >
@@ -170,7 +170,7 @@ function changePage(url, to_page = 1) {
 }
 
 const click_mounted = () => {
-  switchClass("log", "animate__fadeOutRight", "animate__fadeInRight");
+  switchClass("log", "animation-fade-out", "animation-fade-in");
 };
 
 onMounted(() => {
@@ -183,7 +183,7 @@ onUnmounted(() => {
 
 function ShowDetail(e, index, row) {
   e.stopPropagation();
-  switchClass("log", "animate__fadeInRight", "animate__fadeOutRight");
+  switchClass("log", "animation-fade-in", "animation-fade-out");
   if (detail_info.value.index && detail_info.value.index == index) {
     return;
   }
@@ -210,5 +210,8 @@ function getLog(url = "/api/log", params = {}) {
   });
 }
 
-getLog();
+function init() {
+  getLog();
+}
+init();
 </script>

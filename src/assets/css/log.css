@@ -1,7 +1,7 @@
 .log-descriptions {
   width: 60%;
   position: absolute;
-  right: 0px;
+  right: -50%;
   top: 0px;
   border-radius: 4px;
   border: 1px solid #e4e7ed;
@@ -25,5 +25,40 @@
 @media screen and (max-width: 991px) {
   .log-descriptions {
     width: 100%;
+  }
+}
+
+.animation-fade-in {
+  animation-name: fadeFromRight;
+}
+
+.animation {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animation-fade-out {
+  animation-name: fadeOutFromRight;
+}
+
+@keyframes fadeFromRight {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes fadeOutFromRight {
+  0% {
+    opacity: 1;
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
   }
 }

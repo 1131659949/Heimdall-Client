@@ -18,6 +18,12 @@
   display: flex;
 }
 
+.observe {
+  opacity: 0;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
 .information-line {
   display: flex;
   font-size: 14px;
@@ -77,4 +83,9 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:active {
   background: rgb(68, 68, 68);
   border-radius: 10px;
+}
+
+@font-face {
+  font-family: "Candyshop";
+  src: url("../fonts/Candyshop.otf");
 }

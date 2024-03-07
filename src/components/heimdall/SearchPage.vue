@@ -21,7 +21,7 @@
     <div v-else-if="article_list.length">
       <div
         v-for="(article, index) in article_list"
-        class="article-card"
+        class="article-card observe"
         ref="articleCard"
         @click="router.push('/article/' + article.id)"
       >
@@ -53,22 +53,13 @@ import { ref, onUnmounted, nextTick } from "vue";
 import SearchBox from "./SearchBox.vue";
 import LoadingButton from "../animations/LoadingButton.vue";
 import router from "@/router";
+import { io } from "@/assets/js/common";
 const route = useRoute();
 const kw = route.query.kw;
 const next = ref(null);
 const article_list = ref([]);
 var articleCard = ref([]);
 var loading = ref(false);
-
-const io = new IntersectionObserver((entries) => {
-  for (let entry of entries) {
-    if (entry.isIntersecting) {
-      let dom = entry.target;
-      dom.classList.add("animate__animated", "animate__fadeInUp");
-      io.unobserve(dom);
-    }
-  }
-});
 
 function next_search_page() {
   const url = new URL(next.value);
@@ -87,8 +78,7 @@ function next_search_page() {
       article_list.value.push(el);
     });
     await nextTick();
-    console.log(typeof document.querySelectorAll(".article-card"));
-    Array.from(document.querySelectorAll(".article-card"))
+    Array.from(document.querySelectorAll(".observe"))
       .slice(count)
       .forEach((el) => {
         io.observe(el);
@@ -115,7 +105,7 @@ function init() {
       article_list.value.push(el);
     });
     await nextTick();
-    document.querySelectorAll(".article-card").forEach((el) => {
+    document.querySelectorAll(".observe").forEach((el) => {
       io.observe(el);
     });
   });

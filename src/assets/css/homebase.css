@@ -189,8 +189,7 @@ footer {
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
-
-  background-color: white;
+  color: wheat;
   div {
     text-align: center;
     padding-bottom: 3px;

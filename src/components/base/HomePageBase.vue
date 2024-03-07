@@ -1,5 +1,5 @@
 <template>
-  <section style="min-height: 100vh">
+  <section style="min-height: 100vh" class="theme_1">
     <div
       style="
         display: flex;

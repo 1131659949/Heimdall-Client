@@ -1,5 +1,12 @@
 <template>
-  <div :class="background_theme[current_theme]" style="min-height: 100vh">
+  <div
+    style="
+      min-height: 100vh;
+      background-repeat: no-repeat;
+      background-size: cover;
+    "
+    id="main"
+  >
     <header id="header">
       <nav
         id="nav-header"
@@ -346,10 +353,11 @@
 import "@/assets/css/homebase.css";
 import "@/assets/css/cat.css";
 import "@/assets/js/cat.js";
-import { ref, onMounted, getCurrentInstance } from "vue";
+import { ref, onMounted, getCurrentInstance, inject } from "vue";
 import requests from "@/request/request";
 import { ElMessage } from "element-plus";
 
+var background = inject("background", "none");
 var second = ref(0);
 var user = ref();
 onMounted(() => {
@@ -412,15 +420,11 @@ const nav_list = [
     icon: require("../../assets/images/icons/主页.png"),
   },
   {
-    title: "网站",
-    url: "#",
+    title: "友链",
+    url: "/friends",
     icon: require("../../assets/images/icons/图.png"),
   },
 ];
 
-var background_theme = {
-  normal: "theme_1",
-};
-var current_theme = "normal";
 var at_top = true;
 </script>

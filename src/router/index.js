@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router"
 import LogIn from "@/components/LogIn"
 import UserBase from "@/components/base/UserBase"
 import ChatRoomBase from "@/components/base/ChatRoomBase"
@@ -54,6 +54,10 @@ const routes = [
         name: "article",
         component: ArticleContent,
         meta: { requiresAuth: false }
+      }, {
+        path: "/friends",
+        name: "friends",
+        component: () => import("@/components/heimdall/FriendLinks")
       }
     ]
   },
@@ -101,7 +105,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(), // 路由不带#
+  // history: createWebHashHistory(),
+  history: createWebHistory(),  // 路由不带#
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { left: 0, top: 0 }
